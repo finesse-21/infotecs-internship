@@ -41,10 +41,11 @@ export const UserModal: React.FC<UserModalProps> = ({ open, user, onClose }) => 
               });
               onClose();
             },
-            onError: (error: Error) => {
+            onError: (error: unknown) => {
+              const message = error instanceof Error ? error.message : 'Произошла ошибка';
               notification.error({
                 message: 'Ошибка',
-                description: error.message,
+                description: message,
               });
             },
           }
@@ -58,10 +59,11 @@ export const UserModal: React.FC<UserModalProps> = ({ open, user, onClose }) => 
             });
             onClose();
           },
-          onError: (error: Error) => {
+          onError: (error: unknown) => {
+            const message = error instanceof Error ? error.message : 'Произошла ошибка';
             notification.error({
               message: 'Ошибка',
-              description: error.message,
+              description: message,
             });
           },
         });

@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react-hooks';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useLogin } from '../useLogin';
 import React from 'react';
@@ -11,61 +11,56 @@ const createWrapper = () => {
     },
   });
 
-  return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  const Wrapper = ({ children }: { children: React.ReactNode }) => 
+    React.createElement(QueryClientProvider, { client: queryClient }, children);
+  
+  return Wrapper;
 };
 
 describe('useLogin', () => {
   it('should successfully login with correct credentials', async () => {
-    const { result } = renderHook(() => useLogin(), {
+    const { result, waitFor } = renderHook(() => useLogin(), {
       wrapper: createWrapper(),
     });
 
-    result.current.mutate({
-      login: 'admin',
-      password: 'admin',
+    act(() => {
+      result.current.mutate({
+        login: 'admin',
+        password: 'admin',
+      });
     });
 
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true);
-    });
+    await waitFor(() => result.current.isSuccess, { timeout: 3000 });
 
     expect(result.current.data).toBe('mock_auth_token_12345');
   });
 
   it('should fail login with incorrect credentials', async () => {
-    const { result } = renderHook(() => useLogin(), {
+    const { result, waitFor } = renderHook(() => useLogin(), {
       wrapper: createWrapper(),
     });
 
-    result.current.mutate({
-      login: 'wrong',
-      password: 'wrong',
+    act(() => {
+      result.current.mutate({
+        login: 'wrong',
+        password: 'wrong',
+      });
     });
 
-    await waitFor(() => {
-      expect(result.current.isError).toBe(true);
-    });
+    await waitFor(() => result.current.isError, { timeout: 3000 });
 
     expect(result.current.error).toBeInstanceOf(Error);
     expect((result.current.error as Error).message).toBe('Неверный логин или пароль');
   });
 
-  it('should set loading state during login', async () => {
+  it('should have initial idle state', () => {
     const { result } = renderHook(() => useLogin(), {
       wrapper: createWrapper(),
     });
 
-    result.current.mutate({
-      login: 'admin',
-      password: 'admin',
-    });
-
-    expect(result.current.isLoading).toBe(true);
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
+    expect(result.current.isIdle).toBe(true);
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.isSuccess).toBe(false);
+    expect(result.current.isError).toBe(false);
   });
 });

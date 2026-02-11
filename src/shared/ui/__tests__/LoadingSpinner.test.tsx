@@ -4,8 +4,15 @@ import { LoadingSpinner } from '../LoadingSpinner';
 
 describe('LoadingSpinner', () => {
   it('should render loading spinner', () => {
-    render(<LoadingSpinner />);
-    const spinner = screen.getByRole('img', { hidden: true });
+    const { container } = render(<LoadingSpinner />);
+    const spinner = container.querySelector('.ant-spin');
+    expect(spinner).toBeInTheDocument();
+    expect(spinner).toHaveClass('ant-spin-spinning');
+  });
+
+  it('should render large size spinner', () => {
+    const { container } = render(<LoadingSpinner />);
+    const spinner = container.querySelector('.ant-spin-lg');
     expect(spinner).toBeInTheDocument();
   });
 });

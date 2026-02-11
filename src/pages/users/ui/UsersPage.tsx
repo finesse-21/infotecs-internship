@@ -8,6 +8,8 @@ import { useUsers, User } from '@entities/user';
 import { removeToken } from '@shared/lib/auth';
 import { ROUTES } from '@shared/config/routes';
 import { UserModal } from '@widgets/user-modal';
+import { ErrorMessage } from '@shared/ui/ErrorMessage';
+import { LoadingSpinner } from '@shared/ui/LoadingSpinner';
 
 const Container = styled.div`
   padding: 24px;
@@ -37,7 +39,7 @@ const ClickableText = styled.span`
 
 export const UsersPage: React.FC = () => {
   const navigate = useNavigate();
-  const { data: users = [], isLoading } = useUsers();
+  const { data: users = [], isLoading, isError, error, refetch } = useUsers();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -60,6 +62,15 @@ export const UsersPage: React.FC = () => {
     setIsModalOpen(false);
     setSelectedUser(null);
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError) {
+    const errorMessage = error instanceof Error ? error.message : 'Не удалось загрузить пользователей';
+    return <ErrorMessage message={errorMessage} onRetry={refetch} />;
+  }
 
   const columns = [
     {
@@ -111,7 +122,7 @@ export const UsersPage: React.FC = () => {
             onClick={handleCreateUser}
           >
             Создать пользователя
-          </Button>
+          </Buttofalse
           <Button icon={<LogoutOutlined />} onClick={handleLogout}>
             Выход
           </Button>

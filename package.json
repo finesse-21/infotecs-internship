@@ -1,0 +1,36 @@
+{
+  "name": "infotecs-internship",
+  "version": "1.0.0",
+  "description": "User management app with React 16",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tanstack/react-query": "^4.36.1",
+    "antd": "^5.12.0",
+    "axios": "^1.6.2",
+    "dayjs": "^1.11.10",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-router-dom": "^6.20.0",
+    "styled-components": "^6.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.14.52",
+    "@types/react-dom": "^16.9.24",
+    "@types/styled-components": "^5.1.32",
+    "css-loader": "^6.8.1",
+    "html-webpack-plugin": "^5.5.4",
+    "style-loader": "^3.3.3",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}

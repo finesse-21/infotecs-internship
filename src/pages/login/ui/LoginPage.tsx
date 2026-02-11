@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Input, Button, Card, notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -42,10 +42,11 @@ export const LoginPage: React.FC = () => {
         setToken(token);
         navigate(ROUTES.USERS);
       },
-      onError: (error: Error) => {
+      onError: (error: unknown) => {
+        const message = error instanceof Error ? error.message : 'Произошла ошибка';
         notification.error({
           message: 'Ошибка авторизации',
-          description: error.message,
+          description: message,
           placement: 'topRight',
         });
       },

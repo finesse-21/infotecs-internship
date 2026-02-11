@@ -26,7 +26,7 @@ export const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, ...user }: Omit<User, 'createdAt'>) => userApi.update(id, user),
+    mutationFn: (user: Omit<User, 'createdAt'>) => userApi.update(user.id, user),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
     },
